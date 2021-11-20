@@ -4,12 +4,12 @@ import cv2
 import numpy as np
 
 old_color = (100, 30, 0)
-wh = 800
+
 
 
 def drawing_fading_circle(img):
-    xy = (random.randint(100, wh), random.randint(100, wh))
-    for r in range(0, random.randint(0, random.randint(10, wh * 20 / 100)), random.randint(5, 40)):
+    xy = (random.randint(100, res), random.randint(100, res))
+    for r in range(0, random.randint(0, random.randint(10, res * 20 / 100)), random.randint(5, 40)):
         t = random.choice([-1, 1]) * random.randint(1, 10)
         color = random_color()
         cv2.circle(img, xy, r, color, t)
@@ -18,8 +18,8 @@ def drawing_fading_circle(img):
 def drawing_circle(img):
     color = random_color()
     t = random.choice([-1, 1]) * random.randint(1, 10)
-    center = (random.randint(0, wh), random.randint(0, wh))
-    r = random.randint(0, random.randint(10, wh * 15 / 100))
+    center = (random.randint(0, res), random.randint(0, res))
+    r = random.randint(0, random.randint(10, res * 15 / 100))
     cv2.circle(img, center, r, color, t)
 
 
@@ -110,8 +110,8 @@ def triangle(img, center, l, angle, color, t):
 def drawing_star(img):
     color = random_color()
     t = random.choice([-1, 1]) * random.randint(1, 10)
-    center = (random.randint(0, wh), random.randint(0, wh))
-    r = random.randint(1, random.randint(10, wh * 15 / 100))
+    center = (random.randint(0, res), random.randint(0, res))
+    r = random.randint(1, random.randint(10, res * 15 / 100))
     angle = random.randint(0, 72)
     star(img, center, r, angle, color, t)
 
@@ -148,8 +148,8 @@ def star(img, center, l, angle, color, t):
 def drawing_triangle(img):
     color = random_color()
     t = random.choice([-1, 1]) * random.randint(1, 10)
-    center = (random.randint(0, wh), random.randint(0, wh))
-    r = random.randint(0, random.randint(10, wh * 25 / 100))
+    center = (random.randint(0, res), random.randint(0, res))
+    r = random.randint(0, random.randint(10, res * 25 / 100))
     triangle(img, center, r, 0, color, t)
 
 
@@ -158,19 +158,19 @@ def drawing_ellipse(img):
     axes = random.randint(1, 360), random.randint(1, 360)
     angle = random.randint(1, 360)
     t = random.choice([-1, 1]) * random.randint(1, 10)
-    center = (random.randint(0, wh), random.randint(0, wh))
-    r = random.randint(0, random.randint(10, wh * 15 / 100))
+    center = (random.randint(0, res), random.randint(0, res))
+    r = random.randint(0, random.randint(10, res * 15 / 100))
     cv2.ellipse(img, center, axes, angle, 0, 360, color, t)
 
 
 def drawing_rectanagle(img):
     color = random_color()
 
-    x1 = random.randint(0, wh)
-    x2 = random.randint(0, wh)
-    y1 = random.randint(0, wh)
-    y2 = random.randint(0, wh)
-    if (wh ** 2) / 6 < abs((x2 - x1) * (y2 - y1)):
+    x1 = random.randint(0, res)
+    x2 = random.randint(0, res)
+    y1 = random.randint(0, res)
+    y2 = random.randint(0, res)
+    if (res ** 2) / 6 < abs((x2 - x1) * (y2 - y1)):
         t = random.randint(1, 10)
     else:
         t = random.choice([-1, 1]) * random.randint(1, 10)
@@ -179,11 +179,11 @@ def drawing_rectanagle(img):
 
 def drawing_square(img):
     color = random_color()
-    x = random.randint(0, wh)
-    y = random.randint(0, wh)
-    x2 = random.randint(0, wh)
+    x = random.randint(0, res)
+    y = random.randint(0, res)
+    x2 = random.randint(0, res)
     y2 = y + x2 - x
-    if (wh ** 2) / 6 < (x2 - x) ** 2:
+    if (res ** 2) / 6 < (x2 - x) ** 2:
         t = random.randint(1, 10)
     else:
         t = random.choice([-1, 1]) * random.randint(1, 10)
@@ -193,15 +193,15 @@ def drawing_square(img):
 def drawing_line(img):
     color = random_color()
     t = random.randint(1, 10)
-    cv2.line(img, (random.randint(0, wh), random.randint(0, wh)), (random.randint(0, wh), random.randint(0, wh)), color,
+    cv2.line(img, (random.randint(0, res), random.randint(0, res)), (random.randint(0, res), random.randint(0, res)), color,
              t)
 
 
 def drawing_arrow(img):
     color = random_color()
     t = random.randint(1, 10)
-    start = (random.randint(0, wh), random.randint(0, wh))
-    end = (random.randint(0, wh), random.randint(0, wh))
+    start = (random.randint(0, res), random.randint(0, res))
+    end = (random.randint(0, res), random.randint(0, res))
     cv2.arrowedLine(img, start, end, color, t, tipLength=random.randint(1, 10) / 10)
 
 
@@ -261,11 +261,11 @@ def drawing_columns_or_rows(img):
     choice = random.choice([-1, 1])
     color = random_color()
     if choice == 1:
-        y1 = random.randint(0, wh)
+        y1 = random.randint(0, res)
         y2 = random.randint(y1, y1 + 50)
         img[:, y1:y2] = color
     elif choice == -1:
-        x1 = random.randint(0, wh)
+        x1 = random.randint(0, res)
         x2 = random.randint(x1, x1 + 50)
         img[x1:x2, :] = color
 
@@ -332,16 +332,16 @@ def choose_over4():
     choice = random.randint(1, 4)
     if choice == 1:
         x1 = 0
-        y1 = random.randint(0, wh)
+        y1 = random.randint(0, res)
     elif choice == 2:
         y1 = 0
-        x1 = random.randint(0, wh)
+        x1 = random.randint(0, res)
     elif choice == 3:
-        x1 = wh
-        y1 = random.randint(0, wh)
+        x1 = res
+        y1 = random.randint(0, res)
     elif choice == 4:
-        y1 = wh
-        x1 = random.randint(0, wh)
+        y1 = res
+        x1 = random.randint(0, res)
 
     return x1, y1
 
@@ -350,43 +350,43 @@ def choose_over3(x1, y1):
     choice = random.randint(1, 3)
     if choice == 1:
         if x1 == 0:
-            x2 = wh
-            y2 = random.randint(0, wh)
-        if x1 == wh:
+            x2 = res
+            y2 = random.randint(0, res)
+        if x1 == res:
             x2 = 0
-            y2 = random.randint(0, wh)
+            y2 = random.randint(0, res)
         if y1 == 0:
-            y2 = wh
-            x2 = random.randint(0, wh)
-        if y1 == wh:
+            y2 = res
+            x2 = random.randint(0, res)
+        if y1 == res:
             y2 = 0
-            x2 = random.randint(0, wh)
+            x2 = random.randint(0, res)
     elif choice == 2:
         if x1 == 0:
-            x2 = random.randint(0, wh)
+            x2 = random.randint(0, res)
             y2 = 0
-        if x1 == wh:
-            x2 = random.randint(0, wh)
+        if x1 == res:
+            x2 = random.randint(0, res)
             y2 = 0
         if y1 == 0:
-            y2 = random.randint(0, wh)
+            y2 = random.randint(0, res)
             x2 = 0
-        if y1 == wh:
-            y2 = random.randint(0, wh)
+        if y1 == res:
+            y2 = random.randint(0, res)
             x2 = 0
     elif choice == 3:
         if x1 == 0:
-            x2 = random.randint(0, wh)
-            y2 = wh
-        if x1 == wh:
-            x2 = random.randint(0, wh)
-            y2 = wh
+            x2 = random.randint(0, res)
+            y2 = res
+        if x1 == res:
+            x2 = random.randint(0, res)
+            y2 = res
         if y1 == 0:
-            y2 = random.randint(0, wh)
-            x2 = wh
-        if y1 == wh:
-            y2 = random.randint(0, wh)
-            x2 = wh
+            y2 = random.randint(0, res)
+            x2 = res
+        if y1 == res:
+            y2 = random.randint(0, res)
+            x2 = res
     return x2, y2
 
 
@@ -415,12 +415,6 @@ def random_image(height, width):
     cv2.imshow("image", blank_image)
     cv2.waitKey(0)
 
+res = 1000
+random_image(res, res)
 
-random_image(wh, wh)
-"""
-blank_image = np.zeros((500, 500, 3), np.uint8)
-star(blank_image, (300,200), 100, 0, (0,0,255), 1)
-#triangle(blank_image, (300,200), 100, 90, (0,0,255), 2)
-cv2.imshow("image", blank_image)
-cv2.waitKey(0)
-"""
