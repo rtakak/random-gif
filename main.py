@@ -2,7 +2,7 @@ import math
 import random
 import cv2
 import numpy as np
-import imutils
+from imutils import rotate
 import imageio
 
 old_color = (100, 30, 0)
@@ -401,71 +401,66 @@ def random_bg3(img, height, width):
         cv2.line(img, (x1, y1), (x2, y2), color)
 
 
-def random_image(r, n):
+def random_gif(r, n, mode="normal"):
+    
+    
+    
     angle = 360 / n
     width = round(abs(2 * r * math.sin(math.radians(angle/2))))
     height = round(abs(r * math.cos(math.radians(angle/2))))
-    blank_image = np.zeros((height, width, 3), np.uint8)
+    blank_image = np.zeros((height*2, width*2, 3), np.uint8)
     blank_sq = np.zeros((r*2, r*2, 3), np.uint8)
     cv2.circle(blank_sq, (r, r), r, (255,255,255), -1)
-
-
-    # random_bg2(blank_image, height, width)
-    #  random_bg3(blank_image, height, width)
     events = random.randint(100, 800)
+    
+    #pattern making
     print("events no: ", events)
     for event in range(0, events):
         random_event(blank_image)
-    cv2.imshow("a", blank_image)
-    cv2.waitKey(0)
+        
+    blank_image = cv2.resize(blank_image, (width, height), interpolation=cv2.INTER_AREA)
 
-    triangle_cnt = np.array([(0,0), (0,height -2), (width//2,0)])
-    cv2.drawContours(blank_image, [triangle_cnt], 0, (255, 255, 255), -1)
-    triangle_cnt = np.array([(width-1, height-1), (width-1, 0), (round(width / 2), 0)])
-    cv2.drawContours(blank_image, [triangle_cnt], 0, (255, 255, 255), -1)
+    
+
+    if not mode in("trapezoid", "square"):
+        triangle_cnt = np.array([(0,0), (0,height -2), (width//2,0)])
+        cv2.drawContours(blank_image, [triangle_cnt], 0, (255, 255, 255), -1)
+    if mode != "square":
+        triangle_cnt = np.array([(width-1, height-1), (width-1, 0), (round(width / 2), 0)])
+        cv2.drawContours(blank_image, [triangle_cnt], 0, (255, 255, 255), -1)
 
     blank_sq[int(r):int(r + height), int(r - width / 2):int(r + width / 2)] = blank_image
+    blank_sq =  rotate(blank_sq, random.choice([0,180]))
     l1 = chr(random.randint(65, 90))
     l2 = chr(random.randint(65, 90))
     number = random.randint(1000, 9999)
 
-    filename = "Outputs\\" + l1 + l2 + str(number) + ".png"
-    filename_gif = "Outputs\\" + l1 + l2 + str(number) + ".gif"
-    #cv2.imwrite(filename, blank_image, [cv2.IMWRITE_PNG_COMPRESSION, 0])
-    cv2.imshow("image", blank_image)
+    filename_gif = r"D:\Desktop\Projects\OpenCV\random_image\Outputs\\" + l1 + l2 + str(number) + "_" + mode + ".gif"
+    print(l1 + l2 + str(number) + "_" + mode + ".gif")    
     frames = []
-    rotate = blank_sq.copy()
-    for x in list(range(math.ceil((720/angle)))):
-        print(x)
-        rotated = imutils.rotate(rotate, angle*x)
-        blank_sq = cv2.bitwise_and(blank_sq, rotated)
+    rotatex = blank_sq.copy()
+
+    prefix = random.choice([1,-1])
+    
+    deneme = 1
+        
+    for x in list(range(math.ceil((360/angle)))):
+        blank_sq = cv2.bitwise_and(blank_sq, rotate(rotatex, deneme*prefix*angle*x))
+        if mode == "cross":
+            deneme *= -1
         rgb_frame = cv2.cvtColor(blank_sq, cv2.COLOR_BGR2RGB)
         frames.append(rgb_frame)
-        cv2.imshow("circle", blank_sq)
-        cv2.imshow("rotated", rotated
-                   )
-        cv2.waitKey(0)
+        
+
+    for x in list(range(4000 // n)):
+        blank_sq = cv2.bitwise_and(blank_sq, rotate(blank_sq, prefix*angle*x))
+        rgb_frame = cv2.cvtColor(blank_sq, cv2.COLOR_BGR2RGB)
+        frames.append(rgb_frame)
     print("Saving GIF file")
-    """"
-    with imageio.get_writer(filename_gif, mode="I") as writer:
-        for idx, frame in enumerate(frames):
-            print("Adding frame to GIF file: ", idx + 1)
-            writer.append_data(frame)
-    """
+    imageio.mimsave(filename_gif, frames, format='GIF', fps=18)
 
 
 
 
-    cv2.imshow("circle", blank_sq)
-
-    cv2.waitKey(0)
-
-
-random_image(400,30)
-"""
-blank_image = np.zeros((500, 500, 3), np.uint8)
-star(blank_image, (300,200), 100, 0, (0,0,255), 1)
-#triangle(blank_image, (300,200), 100, 90, (0,0,255), 2)
-cv2.imshow("image", blank_image)
-cv2.waitKey(0)
-"""
+modes = ["normal", "cross", "trapezoid", "square"]
+random_gif(380,40, mode = random.choice(modes))
