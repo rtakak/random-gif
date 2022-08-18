@@ -1,2 +1,2 @@
-# random-image
-It draws a random image.
+# random_GIF
+Generates a gif with random pattern.
