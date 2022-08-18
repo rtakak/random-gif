@@ -4,6 +4,8 @@ import cv2
 import numpy as np
 from imutils import rotate
 import imageio
+import os
+
 
 old_color = (100, 30, 0)
 wh = 800
@@ -402,7 +404,9 @@ def random_bg3(img, height, width):
 
 
 def random_gif(r, n, mode="normal"):
-    
+    if mode == "cross":
+        n += n%2
+        print(n)
     
     
     angle = 360 / n
@@ -421,33 +425,44 @@ def random_gif(r, n, mode="normal"):
     blank_image = cv2.resize(blank_image, (width, height), interpolation=cv2.INTER_AREA)
 
     
-
-    if not mode in("trapezoid", "square"):
+    #making pattern triangle or trapezoid or rectangle
+    if not mode in("trapezoid", "rectangle"):
         triangle_cnt = np.array([(0,0), (0,height -2), (width//2,0)])
         cv2.drawContours(blank_image, [triangle_cnt], 0, (255, 255, 255), -1)
-    if mode != "square":
+    if mode != "rectangle":
         triangle_cnt = np.array([(width-1, height-1), (width-1, 0), (round(width / 2), 0)])
         cv2.drawContours(blank_image, [triangle_cnt], 0, (255, 255, 255), -1)
 
     blank_sq[int(r):int(r + height), int(r - width / 2):int(r + width / 2)] = blank_image
     blank_sq =  rotate(blank_sq, random.choice([0,180]))
+    
+    #generating random name
     l1 = chr(random.randint(65, 90))
     l2 = chr(random.randint(65, 90))
     number = random.randint(1000, 9999)
-
-    filename_gif = r"D:\Desktop\Projects\OpenCV\random_image\Outputs\\" + l1 + l2 + str(number) + "_" + mode + ".gif"
-    print(l1 + l2 + str(number) + "_" + mode + ".gif")    
+    
+    #checking if output directory exist and create if not
+    directory = os.getcwd() + r"\Outputs\\"
+    if not os.path.isdir(directory):
+        os.makedirs(directory)
+            
+    filename_gif = directory + l1 + l2 + str(number) + "_" + mode + ".gif"
+    print(l1 + l2 + str(number) + "_" + mode + ".gif")  
+    
+      
     frames = []
     rotatex = blank_sq.copy()
 
+    #rotation way of animation
     prefix = random.choice([1,-1])
     
-    deneme = 1
+    cross_effect = 1
         
+    #animations
     for x in list(range(math.ceil((360/angle)))):
-        blank_sq = cv2.bitwise_and(blank_sq, rotate(rotatex, deneme*prefix*angle*x))
+        blank_sq = cv2.bitwise_and(blank_sq, rotate(rotatex, cross_effect*prefix*angle*x))
         if mode == "cross":
-            deneme *= -1
+            cross_effect *= -1
         rgb_frame = cv2.cvtColor(blank_sq, cv2.COLOR_BGR2RGB)
         frames.append(rgb_frame)
         
@@ -456,11 +471,14 @@ def random_gif(r, n, mode="normal"):
         blank_sq = cv2.bitwise_and(blank_sq, rotate(blank_sq, prefix*angle*x))
         rgb_frame = cv2.cvtColor(blank_sq, cv2.COLOR_BGR2RGB)
         frames.append(rgb_frame)
+        
     print("Saving GIF file")
     imageio.mimsave(filename_gif, frames, format='GIF', fps=18)
 
 
 
+modes = ["normal", "cross", "trapezoid", "rectangle"]
+numbers = [15, 30, 45, 60, 75]
+resolution = 1000
 
-modes = ["normal", "cross", "trapezoid", "square"]
-random_gif(380,40, mode = random.choice(modes))
+random_gif(resolution // 2, random.choice(numbers), random.choice(modes))
