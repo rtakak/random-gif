@@ -1,6 +1,6 @@
 # random_GIF
 
-Generates a random pattern adds an animation effect with a GIF.
+Generates a random pattern and creates an animation effect with as a GIF.
 
 ## Installation
 
