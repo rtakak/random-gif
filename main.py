@@ -7,13 +7,10 @@ import imageio
 import os
 
 
-old_color = (100, 30, 0)
 wh = 800
-
-
 def drawing_fading_circle(img):
     xy = (random.randint(100, wh), random.randint(100, wh))
-    for r in range(0, random.randint(0, random.randint(10, wh * 20 / 100)), random.randint(5, 40)):
+    for r in range(0, random.randint(0, random.randint(10, round(wh * 20 / 100))), random.randint(5, 40)):
         t = random.choice([-1, 1]) * random.randint(1, 10)
         color = random_color()
         cv2.circle(img, xy, r, color, t)
@@ -23,7 +20,7 @@ def drawing_circle(img):
     color = random_color()
     t = random.choice([-1, 1]) * random.randint(1, 10)
     center = (random.randint(0, wh), random.randint(0, wh))
-    r = random.randint(0, random.randint(10, wh * 15 / 100))
+    r = random.randint(0, random.randint(10, round(wh * 15 / 100)))
     cv2.circle(img, center, r, color, t)
 
 
@@ -115,7 +112,7 @@ def drawing_star(img):
     color = random_color()
     t = random.choice([-1, 1]) * random.randint(1, 10)
     center = (random.randint(0, wh), random.randint(0, wh))
-    r = random.randint(1, random.randint(10, wh * 15 / 100))
+    r = random.randint(1, random.randint(10, round(wh * 15 / 100)))
     angle = random.randint(0, 72)
     star(img, center, r, angle, color, t)
 
@@ -153,7 +150,7 @@ def drawing_triangle(img):
     color = random_color()
     t = random.choice([-1, 1]) * random.randint(1, 10)
     center = (random.randint(0, wh), random.randint(0, wh))
-    r = random.randint(0, random.randint(10, wh * 25 / 100))
+    r = random.randint(0, random.randint(10, round(wh * 25 / 100)))
     triangle(img, center, r, 0, color, t)
 
 
@@ -163,7 +160,7 @@ def drawing_ellipse(img):
     angle = random.randint(1, 360)
     t = random.choice([-1, 1]) * random.randint(1, 10)
     center = (random.randint(0, wh), random.randint(0, wh))
-    r = random.randint(0, random.randint(10, wh * 15 / 100))
+    r = random.randint(0, random.randint(10, round(wh * 15 / 100)))
     cv2.ellipse(img, center, axes, angle, 0, 360, color, t)
 
 
@@ -217,15 +214,10 @@ def random_color_old():
 
 
 def random_color():
-    global old_color
     if random.randint(0, 100) > 10:
-        b = (old_color[0] + random.randint(0, 150)) % 255
-        g = (old_color[1] + random.randint(0, 150)) % 255
-        r = (old_color[2] + random.randint(0, 150)) % 255
         b = random.randint(0, 255)
         g = random.randint(0, 255)
         r = random.randint(0, 255)
-        choice = random.randint(1, 6)
         return b, g, r
     else:
         choice = random.randint(1, 5)
@@ -406,7 +398,6 @@ def random_bg3(img, height, width):
 def random_gif(r, n, mode="normal"):
     if mode == "cross":
         n += n%2
-        print(n)
     
     
     angle = 360 / n
@@ -421,8 +412,10 @@ def random_gif(r, n, mode="normal"):
     print("events no: ", events)
     for event in range(0, events):
         random_event(blank_image)
-        
+
     blank_image = cv2.resize(blank_image, (width, height), interpolation=cv2.INTER_AREA)
+    cv2.imshow("The pattern", blank_image)
+    cv2.waitKey(0)
 
     
     #making pattern triangle or trapezoid or rectangle
@@ -445,8 +438,9 @@ def random_gif(r, n, mode="normal"):
     directory = os.getcwd() + r"\Outputs\\"
     if not os.path.isdir(directory):
         os.makedirs(directory)
-            
-    filename_gif = directory + l1 + l2 + str(number) + "_" + mode + ".gif"
+    #ToDo
+    print(directory)
+    filename_gif = r"D:\Desktop\Projects\OpenCV\random_gif\Outputs\\" + l1 + l2 + str(number) + "_" + mode + ".gif"
     print(l1 + l2 + str(number) + "_" + mode + ".gif")  
     
       
